@@ -1,0 +1,11 @@
+datasets==3.6.0
+pandas==2.2.3
+transformers==4.52.3
+numpy>=1.19.5,<2.0.0
+scikit-learn==1.6.1
+torch==2.7.0
+tqdm==4.67.1
+accelerate==1.7.0
+matplotlib==3.7.3
+seaborn==0.13.1
+gradio==4.19.1
