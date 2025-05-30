@@ -1,6 +1,6 @@
 from datasets import load_dataset, Dataset
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer, EarlyStoppingCallback
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 import torch
@@ -58,11 +58,15 @@ training_args = TrainingArguments(
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
-    num_train_epochs=3,
+    num_train_epochs=5,
     weight_decay=0.01,
     logging_dir="logs",
     logging_steps=50,
     fp16=torch.cuda.is_available(),  # GPU 사용 시 학습 속도 향상을 위한 설정
+
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_f1",
+    greater_is_better=True
 )
 
 trainer = Trainer(
@@ -71,7 +75,8 @@ trainer = Trainer(
     train_dataset=train_ds,
     eval_dataset=valid_ds,
     tokenizer=tokenizer,
-    compute_metrics=compute_metrics
+    compute_metrics=compute_metrics,
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=2)]
 )
 
 trainer.train()
