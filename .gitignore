@@ -1,3 +1,4 @@
 venv/
 news-finetuned/
 news-finetuned-model/
+*.pyc
